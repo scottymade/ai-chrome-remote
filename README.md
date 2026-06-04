@@ -24,10 +24,12 @@ The base loop is:
 
 ## How To Start
 
+Replace `/path/to/ai-chrome-remote` in the examples below with the local path where you cloned this repository.
+
 1. Build the project:
 
 ```bash
-cd /Users/scottbrooks/repos/ai-chrome-remote
+cd /path/to/ai-chrome-remote
 npm install
 npm run check
 ```
@@ -37,7 +39,7 @@ npm run check
 Open `chrome://extensions`, turn on Developer Mode, click **Load unpacked**, and select:
 
 ```text
-/Users/scottbrooks/repos/ai-chrome-remote/dist/extension
+/path/to/ai-chrome-remote/dist/extension
 ```
 
 Copy the generated extension ID.
@@ -70,7 +72,7 @@ Chrome should create or reuse a tab group named `AI remote control`.
     "ai-chrome-remote": {
       "command": "node",
       "args": [
-        "/Users/scottbrooks/repos/ai-chrome-remote/dist/native-host/src/mcp-server.js"
+        "/path/to/ai-chrome-remote/dist/native-host/src/mcp-server.js"
       ]
     }
   }
