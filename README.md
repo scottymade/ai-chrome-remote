@@ -22,6 +22,71 @@ The base loop is:
 - Internal logs that are readable by MCP without needing DevTools console output.
 - Generic browser controls: open URL, status, scroll, click, type, DOM snapshot, screenshot, network entries, jobs, and registered adapter actions.
 
+## How To Start
+
+1. Build the project:
+
+```bash
+cd /Users/scottbrooks/repos/ai-chrome-remote
+npm install
+npm run check
+```
+
+2. Load the extension in Chrome:
+
+Open `chrome://extensions`, turn on Developer Mode, click **Load unpacked**, and select:
+
+```text
+/Users/scottbrooks/repos/ai-chrome-remote/dist/extension
+```
+
+Copy the generated extension ID.
+
+3. Install the native host:
+
+```bash
+npm run install:chrome -- --extension-id <chrome-extension-id>
+```
+
+Reload the extension in `chrome://extensions`.
+
+4. Smoke test the local bridge:
+
+```bash
+npm run invoke -- host_status
+npm run invoke -- open_url '{"url":"https://www.google.com/","active":true}'
+npm run invoke -- tab_status
+npm run invoke -- get_dom_snapshot '{"textMaxChars":2000,"elementLimit":50}'
+npm run invoke -- get_network_entries '{"limit":20,"newestFirst":true}'
+```
+
+Chrome should create or reuse a tab group named `AI remote control`.
+
+5. Add the MCP server to your MCP client:
+
+```json
+{
+  "mcpServers": {
+    "ai-chrome-remote": {
+      "command": "node",
+      "args": [
+        "/Users/scottbrooks/repos/ai-chrome-remote/dist/native-host/src/mcp-server.js"
+      ]
+    }
+  }
+}
+```
+
+Start with these tools: `chrome_remote_open_url`, `chrome_remote_get_dom_snapshot`, `chrome_remote_get_network_entries`, `chrome_remote_get_logs`, `chrome_remote_click`, `chrome_remote_type`, and `chrome_remote_scroll`.
+
+6. Build support for a real website on a feature branch:
+
+```bash
+git checkout -b feature/any-website-you-want-to-support
+```
+
+Add or edit a folder under `sites/`, rebuild, reload the extension, then use the generic MCP tools to explore the site before adding site-specific adapter actions.
+
 ## Repository Layout
 
 ```text
