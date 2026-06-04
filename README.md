@@ -167,6 +167,7 @@ Create a folder under `sites/`:
 ```text
 sites/youtube/
   site.json
+  guide.md        instructions for LLMs using this site adapter
   adapter.js       optional, add only when you are ready for site-specific actions
 ```
 
@@ -191,6 +192,8 @@ npm run build
 ```
 
 Chrome requires host permissions and content-script matches to be static in the built manifest. The dynamic developer workflow is: add or edit a site folder, rebuild, reload the extension.
+
+Each site folder should include a `guide.md` file. Use it to document how an LLM should operate that site: available adapter actions, expected inputs and outputs, pagination or scrolling patterns, important caveats, and the recommended observe-act-extract workflow. Keep site-specific usage instructions in the site folder so adapters remain drop-in and independently maintainable.
 
 ## Adding Site-Specific Actions
 
