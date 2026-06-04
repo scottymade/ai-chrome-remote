@@ -1,0 +1,12 @@
+{
+  "id": "example",
+  "name": "Example.com",
+  "description": "Minimal example adapter for the template's default allowed site.",
+  "matches": [
+    "https://example.com/*"
+  ],
+  "actions": [
+    "extractLinks",
+    "summarizePage"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "AI Chrome Remote",
+  "version": "0.1.0",
+  "description": "Starter extension for AI-controlled browser automation, network observation, and site-specific scraper adapters.",
+  "permissions": [
+    "activeTab",
+    "nativeMessaging",
+    "scripting",
+    "storage",
+    "tabGroups",
+    "tabs"
+  ],
+  "host_permissions": [],
+  "action": {
+    "default_title": "AI Chrome Remote"
+  },
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [],
+      "js": [
+        "src/page/network-recorder.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [],
+      "js": [
+        "src/content/router.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/page/page-agent.js",
+        "sites/registry.json"
+      ],
+      "matches": []
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HOST_DIR="${HOME:-}/.ai-chrome-remote"
+NODE_PATH_FILE="$HOST_DIR/node-path"
+NODE_BIN=""
+
+if [[ -r "$NODE_PATH_FILE" ]]; then
+    NODE_BIN="$(cat "$NODE_PATH_FILE")"
+fi
+
+if [[ -z "$NODE_BIN" || ! -x "$NODE_BIN" ]]; then
+    if command -v node >/dev/null 2>&1; then
+        NODE_BIN="$(command -v node)"
+    elif [[ -x "/opt/homebrew/bin/node" ]]; then
+        NODE_BIN="/opt/homebrew/bin/node"
+    elif [[ -x "/usr/local/bin/node" ]]; then
+        NODE_BIN="/usr/local/bin/node"
+    else
+        echo "Cannot find node. Re-run install-chrome-host from a shell where node is available." >&2
+        exit 127
+    fi
+fi
+
+exec "$NODE_BIN" "$SCRIPT_DIR/../src/index.js"

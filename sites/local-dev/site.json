@@ -1,0 +1,10 @@
+{
+  "id": "local-dev",
+  "name": "Local Development",
+  "description": "Localhost allowlist for testing new adapters during development.",
+  "matches": [
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
+  "actions": []
+}
