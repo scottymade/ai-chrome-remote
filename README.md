@@ -2,6 +2,8 @@
 
 AI Chrome Remote is a starter for building Chrome extensions that an LLM can control through MCP. It gives you the baseline bridge, observation tools, and extension points needed to build site-specific browser agents without baking a scraper into the core.
 
+![How an AI controls Chrome through MCP](docs/images/ai-chrome-remote-flow.png)
+
 The base loop is:
 
 1. Add a site folder to the allowlist.
@@ -22,7 +24,13 @@ The base loop is:
 - Internal logs that are readable by MCP without needing DevTools console output.
 - Generic browser controls: open URL, status, scroll, click, type, DOM snapshot, screenshot, network entries, jobs, and registered adapter actions.
 
-## How To Start
+## Inside AI Chrome Remote
+
+The Chrome extension controls allowlisted pages while observing relevant application traffic, then returns structured JSON through the local MCP bridge.
+
+![Inside AI Chrome Remote](docs/images/inside-ai-chrome-remote.png)
+
+## Quick Start
 
 Replace `/path/to/ai-chrome-remote` in the examples below with the local path where you cloned this repository.
 
@@ -64,6 +72,8 @@ npm run invoke -- get_network_entries '{"limit":20,"newestFirst":true}'
 
 Chrome should create or reuse a tab group named `AI remote control`.
 
+Google includes a site-specific adapter for search result extraction, result verticals, pagination, ranked result opening, and Google Maps place research. It also remains a useful smoke-test target for the generic observe-act-observe loop.
+
 5. Add the MCP server to your MCP client:
 
 ```json
@@ -79,62 +89,13 @@ Chrome should create or reuse a tab group named `AI remote control`.
 }
 ```
 
-Start with these tools: `chrome_remote_open_url`, `chrome_remote_get_dom_snapshot`, `chrome_remote_get_network_entries`, `chrome_remote_get_logs`, `chrome_remote_click`, `chrome_remote_type`, and `chrome_remote_scroll`.
+## Use with Caution
 
-6. Build support for a real website on a feature branch:
+Automated browsing may violate some websites' Terms of Service or trigger anti-abuse systems.
 
-```bash
-git checkout -b feature/any-website-you-want-to-support
-```
-
-Add or edit a folder under `sites/`, rebuild, reload the extension, then use the generic MCP tools to explore the site before adding site-specific adapter actions.
-
-## Repository Layout
-
-```text
-extension/      MV3 extension source
-native-host/    Native Messaging host, MCP server, CLI helper, installer
-shared/         Shared protocol and MCP tool definitions
-sites/          Build-time allowlist and optional site adapters
-examples/       Notes for adding adapter modules
-scripts/        Build/copy/validation helpers
-dist/           Generated runnable extension and native host
-```
-
-## Install And Build
-
-```bash
-npm install
-npm run check
-```
-
-Load the generated extension from:
-
-```text
-dist/extension
-```
-
-Then copy the extension ID from `chrome://extensions` and install the Chrome Native Messaging manifest:
-
-```bash
-npm run install:chrome -- --extension-id <chrome-extension-id>
-```
-
-Reload the extension after installing the native host.
-
-## Smoke Test
-
-After Chrome has launched the native host:
-
-```bash
-npm run invoke -- host_status
-npm run invoke -- open_url '{"url":"https://www.google.com/","active":true}'
-npm run invoke -- tab_status
-npm run invoke -- get_dom_snapshot '{"textMaxChars":2000,"elementLimit":50}'
-npm run invoke -- get_network_entries '{"limit":20,"newestFirst":true}'
-```
-
-Google includes a site-specific adapter for search result extraction, result verticals, pagination, ranked result opening, and Google Maps place research. It also remains a useful smoke-test target for the generic observe-act-observe loop.
+- Consider loading the extension in a separate browser profile, such as a dedicated Brave profile, instead of your everyday Chrome profile.
+- For websites that require authentication, use a dedicated test account only when the site permits automation. Automated activity may cause an account to be restricted or banned.
+- A reputable VPN can add a layer of network privacy, but it does not make prohibited automation safe or compliant.
 
 ## MCP Server
 
@@ -160,7 +121,17 @@ Useful starter tools:
 
 The MCP client owns model access. This extension does not store LLM API keys.
 
-## Adding A Site
+## Developing Site Adapters
+
+Create a feature branch before adding support for a website:
+
+```bash
+git checkout -b feature/any-website-you-want-to-support
+```
+
+Add or edit a folder under `sites/`, rebuild, reload the extension, then use the generic MCP tools to explore the site before adding site-specific adapter actions.
+
+### Adding a Site
 
 Create a folder under `sites/`:
 
@@ -195,7 +166,7 @@ Chrome requires host permissions and content-script matches to be static in the 
 
 Each site folder should include a `guide.md` file. Use it to document how an LLM should operate that site: available adapter actions, expected inputs and outputs, pagination or scrolling patterns, important caveats, and the recommended observe-act-extract workflow. Keep site-specific usage instructions in the site folder so adapters remain drop-in and independently maintainable.
 
-## Adding Site-Specific Actions
+### Adding Site-Specific Actions
 
 When exploration shows what the scraper needs, add an `adapter.js` in that site folder:
 
@@ -229,6 +200,18 @@ Then call it through MCP:
 ```
 
 The core intentionally does not allow arbitrary runtime JavaScript execution from MCP. Site-specific behavior should be reviewed as code in a site adapter.
+
+## Repository Layout
+
+```text
+extension/      MV3 extension source
+native-host/    Native Messaging host, MCP server, CLI helper, installer
+shared/         Shared protocol and MCP tool definitions
+sites/          Build-time allowlist and optional site adapters
+examples/       Notes for adding adapter modules
+scripts/        Build/copy/validation helpers
+dist/           Generated runnable extension and native host
+```
 
 ## Tab Group And Background Interaction
 
