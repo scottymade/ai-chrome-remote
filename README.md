@@ -89,7 +89,7 @@ Google includes a site-specific adapter for search result extraction, result ver
 }
 ```
 
-## Use with Caution
+## ⚠️ Use with Caution
 
 Automated browsing may violate some websites' Terms of Service or trigger anti-abuse systems.
 
