@@ -1,10 +1,26 @@
 {
   "id": "google",
-  "name": "Google Exploration",
-  "description": "Allowlist-only fixture for exercising the generic observe-act-observe loop. Add a site adapter on a feature branch when real Google-specific scraping is needed.",
+  "name": "Google Search",
+  "description": "Google Search adapter for submitting searches and extracting visible result summaries after generic DOM exploration.",
   "matches": [
     "https://www.google.com/*",
-    "https://google.com/*"
+    "https://google.com/*",
+    "https://maps.google.com/*"
   ],
-  "actions": []
+  "actions": [
+    "getSearchState",
+    "search",
+    "extractResults",
+    "searchMaps",
+    "openMapsPlace",
+    "extractGoogleMapsNetworkEvidence",
+    "extractMapsResults",
+    "researchGoogleMaps",
+    "researchGoogleMapsPlace",
+    "openResult",
+    "startGoogleCollection",
+    "collectGoogleResults",
+    "queryGoogleCollection",
+    "clearGoogleCollection"
+  ]
 }

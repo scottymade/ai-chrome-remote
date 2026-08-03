@@ -134,7 +134,7 @@ npm run invoke -- get_dom_snapshot '{"textMaxChars":2000,"elementLimit":50}'
 npm run invoke -- get_network_entries '{"limit":20,"newestFirst":true}'
 ```
 
-Google is included as an allowlist-only exploration fixture. It has no Google-specific scraper. The point is to prove the generic observe-act-observe loop on a real site.
+Google includes a site-specific adapter for search result extraction, result verticals, pagination, ranked result opening, and Google Maps place research. It also remains a useful smoke-test target for the generic observe-act-observe loop.
 
 ## MCP Server
 

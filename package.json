@@ -10,7 +10,7 @@
     "build:native": "tsc -p tsconfig.native.json",
     "copy-static": "node scripts/copy-static.mjs",
     "build": "npm run clean && npm run build:extension && npm run build:native && npm run copy-static",
-    "check": "npm run build && node --check dist/native-host/src/index.js && node --check dist/native-host/src/native-messaging.js && node --check dist/native-host/src/invoke.js && node --check dist/native-host/src/mcp-server.js && node --check dist/native-host/src/install-chrome-host.js && node scripts/validate-dist.mjs",
+    "check": "npm run build && node --check dist/native-host/src/index.js && node --check dist/native-host/src/native-messaging.js && node --check dist/native-host/src/invoke.js && node scripts/test-google-maps-adapter.mjs && node --check dist/native-host/src/mcp-server.js && node --check dist/native-host/src/install-chrome-host.js && node scripts/validate-dist.mjs",
     "dev:watch": "tsc -p tsconfig.extension.json --watch",
     "install:chrome": "node dist/native-host/src/install-chrome-host.js",
     "invoke": "node dist/native-host/src/invoke.js",
